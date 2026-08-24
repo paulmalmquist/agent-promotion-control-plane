@@ -16,6 +16,7 @@
     "dev": "npm run dev --workspace @promotion-control-plane/web",
     "build": "npm run build --workspace @promotion-control-plane/ui && npm run build --workspace @promotion-control-plane/web",
     "lint": "npm run lint --workspaces --if-present",
+    "pretypecheck": "npm run build --workspace @promotion-control-plane/ui",
     "typecheck": "npm run typecheck --workspaces --if-present",
     "test": "npm run test --workspaces --if-present",
     "test:e2e": "npm run test:e2e --workspace @promotion-control-plane/web",
