@@ -1,0 +1,37 @@
+schema_version: 1
+seed_id: promotion-demo-v1
+fixed_examples:
+  - slug: evidence-router
+    expected_stage: DISCOVERED
+    expected_status: ACTIVE
+  - slug: invoice-reconciliation
+    expected_stage: CANDIDATE
+    expected_status: ACTIVE
+  - slug: access-review-drafter
+    expected_stage: EVALUATING
+    expected_status: ACTIVE
+  - slug: support-triage
+    expected_stage: EVALUATING
+    expected_status: BLOCKED
+    scenario: incomplete_evidence
+  - slug: deployment-advisor
+    expected_stage: EVALUATING
+    expected_status: BLOCKED
+    scenario: hard_gate_blocked
+  - slug: renewal-briefing
+    expected_stage: ELIGIBLE
+    expected_status: ACTIVE
+    scenario: eligible
+  - slug: incident-summarizer
+    expected_stage: PROMOTED
+    expected_status: ACTIVE
+    scenario: successful_promotion
+  - slug: vendor-risk-monitor
+    expected_stage: MONITORED
+    expected_status: SUSPENDED
+    scenario: post_promotion_regression
+autonomous_cycle_candidate:
+  slug: change-risk-coordinator
+  begins_at: DISCOVERED
+  ends_at: MONITORED
+  expected_status: ACTIVE

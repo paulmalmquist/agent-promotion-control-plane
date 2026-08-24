@@ -1,0 +1,27 @@
+{
+  "name": "agent-promotion-control-plane",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Portable reference control plane for evidence-gated agent promotion.",
+  "engines": {
+    "node": ">=24 <25",
+    "npm": ">=11 <12"
+  },
+  "packageManager": "npm@11.12.0",
+  "workspaces": [
+    "apps/web",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspace @promotion-control-plane/web",
+    "build": "npm run build --workspace @promotion-control-plane/ui && npm run build --workspace @promotion-control-plane/web",
+    "lint": "npm run lint --workspaces --if-present",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present",
+    "test:e2e": "npm run test:e2e --workspace @promotion-control-plane/web",
+    "test:sse": "npm run test:sse --workspace @promotion-control-plane/web",
+    "generate:types": "npm run generate:types --workspace @promotion-control-plane/web",
+    "audit:high": "npm audit --audit-level=high",
+    "check:lf": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/check-lf.ps1"
+  }
+}

@@ -1,0 +1,40 @@
+schema_version: 1
+detector_set_id: default-deterministic-detectors
+version: 1.0.0
+detectors:
+  - detector_id: repeated-successful-skill-usage
+    signal_type: repeated_successful_skill_usage
+    minimum_observations: 12
+    confidence_floor: 0.80
+  - detector_id: recurring-multi-skill-workflow
+    signal_type: recurring_multi_skill_workflow_pattern
+    minimum_observations: 8
+    confidence_floor: 0.78
+  - detector_id: high-manual-invocation-frequency
+    signal_type: high_manual_invocation_frequency
+    minimum_observations: 15
+    confidence_floor: 0.75
+  - detector_id: repeated-human-workaround
+    signal_type: repeated_human_workaround
+    minimum_observations: 5
+    confidence_floor: 0.72
+  - detector_id: strong-evaluation-history
+    signal_type: strong_evaluation_history
+    minimum_observations: 10
+    confidence_floor: 0.85
+  - detector_id: capability-coverage-gap
+    signal_type: capability_coverage_gap
+    minimum_observations: 3
+    confidence_floor: 0.70
+  - detector_id: recurring-operational-trigger
+    signal_type: recurring_operational_trigger
+    minimum_observations: 7
+    confidence_floor: 0.76
+  - detector_id: stable-skill-bundle
+    signal_type: stable_skill_bundle_synthesis
+    minimum_observations: 10
+    confidence_floor: 0.82
+ai_assisted_ranking:
+  enabled: false
+  persisted_signals_only: true
+  may_create_evidence: false

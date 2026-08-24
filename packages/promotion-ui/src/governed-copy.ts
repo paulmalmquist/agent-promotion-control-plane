@@ -1,0 +1,137 @@
+export interface GovernedScreenCopy {
+  line1: string;
+  line2: string;
+}
+
+export interface GovernedActionCopy {
+  label: string;
+  consequence: string;
+  undo: string;
+}
+
+export const governedCopyBody = {
+  version: "2026.08.1",
+  screens: {
+    overview: {
+      line1: "This control plane tracks tested agents from discovery through registry activation.",
+      line2: "Review blockers, evidence readiness, and publication state before choosing the next action."
+    },
+    candidates: {
+      line1: "These candidates are moving through the governed promotion lifecycle.",
+      line2: "Open a candidate to inspect evidence, blockers, approvals, and registry state."
+    },
+    candidate: {
+      line1: "This record explains why the candidate surfaced and whether its evidence is complete.",
+      line2: "Review every failed gate before recording a promotion lifecycle decision."
+    },
+    blocker: {
+      line1: "This candidate cannot advance because a required gate failed.",
+      line2: "Review the evidence, then rerun the gate after correcting the issue."
+    },
+    promotionRationale: {
+      line1: "This decision records why the tested candidate may enter the registry.",
+      line2: "Confirm the evidence snapshot and rationale before queuing irreversible publication."
+    },
+    registryPending: {
+      line1: "The reviewer approved promotion, and the worker has not activated the registry version.",
+      line2: "Monitor publication; production selection will not change until the worker succeeds."
+    },
+    registryFailure: {
+      line1: "Registry activation failed, so the candidate remains eligible but blocked.",
+      line2: "Review the failure, then retry after correcting the registry connection."
+    },
+    evaluations: {
+      line1: "These runs collect measurements for the active evaluation plans.",
+      line2: "Inspect incomplete or failed work before trusting a readiness percentage."
+    },
+    contract: {
+      line1: "This contract defines the gates, evidence, samples, and weighted score required.",
+      line2: "Compare the immutable policy hash before using any readiness decision."
+    },
+    automation: {
+      line1: "This screen shows work triggered by commands or external schedulers.",
+      line2: "Check each owner and last run; disconnected jobs will not run automatically."
+    },
+    registry: {
+      line1: "This registry lists immutable agent versions activated by successful worker publication.",
+      line2: "Confirm the policy hash before selecting a version for production runs."
+    },
+    audit: {
+      line1: "This timeline replays append-only control-plane events in durable sequence order.",
+      line2: "Trace correlation and causation before explaining any lifecycle change."
+    }
+  },
+  actions: {
+    promote: {
+      label: "Queue registry publication",
+      consequence: "Queues registry publication. Production selection may change only after worker success.",
+      undo: "Close this dialog to cancel. You cannot revoke queued publication here."
+    },
+    retryRegistry: {
+      label: "Retry registry publication",
+      consequence: "Queues another registry attempt with the same stable publication token.",
+      undo: "Close this dialog to cancel. The recorded failure remains available for review."
+    },
+    runEvaluation: {
+      label: "Queue evaluation",
+      consequence: "Queues a new run against the current immutable evaluation plan.",
+      undo: "Cancel before work starts. Completed results remain append-only evidence."
+    },
+    runCycle: {
+      label: "Run autonomous cycle",
+      consequence: "Dispatches the six demo jobs and records their real run history.",
+      undo: "The cycle is idempotent. Recorded events remain append-only."
+    }
+  },
+  runtime: {
+    lifecycleDecisionQueued: "Recorded the lifecycle decision. Queued registry publication.",
+    lifecycleDecisionUnavailable: "No decision transport exists. The system left the candidate unchanged.",
+    lifecycleDecisionFailed: "Recording the lifecycle decision failed.",
+    registryRetryQueued: "Queued registry publication with the stable publication token.",
+    registryRetryFailed: "Queueing the registry retry failed.",
+    demoCycleDispatched: "Dispatched the demo cycle. Durable job runs will appear through the event stream.",
+    demoCycleFailed: "Dispatching the demo cycle failed."
+  },
+  authorityNotice:
+    "Promotion changes which tested version new production runs select. It does not authorize a run or grant tool access."
+} as const;
+
+export function canonicalizeGovernedCopy(value: unknown): string {
+  const normalize = (input: unknown): unknown => {
+    if (Array.isArray(input)) return input.map(normalize);
+    if (input !== null && typeof input === "object") {
+      return Object.fromEntries(
+        Object.entries(input as Record<string, unknown>)
+          .sort(([left], [right]) => left.localeCompare(right))
+          .map(([key, child]) => [key, normalize(child)])
+      );
+    }
+    return input;
+  };
+  return JSON.stringify(normalize(value));
+}
+
+export const governedCopyArtifact = {
+  ...governedCopyBody,
+  digest: "sha256:6c3060d3827f78b69454eff28cdfac2a7e7c45a36f04c8058454b03c6161fc70"
+} as const;
+
+export type GovernedCopyArtifact = typeof governedCopyArtifact;
+
+export interface CopySemanticResult {
+  purpose: string;
+  event: string;
+  buttonEffects: Record<string, string>;
+  passed: boolean;
+  certification: "CERTIFIED" | "FAILED" | "UNAVAILABLE";
+  provider: string;
+}
+
+export interface CopySemanticEvaluator {
+  evaluate(input: {
+    screen: keyof typeof governedCopyBody.screens;
+    line1: string;
+    line2: string;
+    actions: GovernedActionCopy[];
+  }): Promise<CopySemanticResult>;
+}

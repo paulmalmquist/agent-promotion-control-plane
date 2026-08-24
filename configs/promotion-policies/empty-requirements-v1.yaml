@@ -1,0 +1,14 @@
+schema_version: 1
+policy_id: observation-only
+version: 1.0.0
+title: Observation-only policy with no evaluation requirements
+applicable_candidate_types: [workflow]
+target_stage: SHADOW
+lifecycle_stages: [DISCOVERED, CANDIDATE, EVALUATING, ELIGIBLE, SHADOW, PROMOTED, MONITORED]
+minimum_weighted_score: 0
+required_lifecycle_approvals: 0
+regression_tolerance: 0
+post_promotion_observation:
+  required_runs: 0
+  review_after_hours: 0
+criteria: []

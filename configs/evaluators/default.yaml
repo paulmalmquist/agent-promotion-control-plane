@@ -1,0 +1,26 @@
+schema_version: 1
+evaluator_set_id: default-reference-evaluators
+version: 1.0.0
+evaluators:
+  - evaluator_id: deterministic-rule
+    evaluator_type: deterministic_rule
+    version: 1.0.0
+    enabled: true
+  - evaluator_id: allowlisted-test-suite
+    evaluator_type: test_suite
+    version: 1.0.0
+    enabled: true
+    allowlist:
+      - promotion-control-plane-fixture-suite
+  - evaluator_id: synthetic-metric
+    evaluator_type: synthetic_metric
+    version: 1.0.0
+    enabled: true
+  - evaluator_id: openai-rubric
+    evaluator_type: openai_rubric
+    version: 1.0.0
+    enabled_when_env: OPENAI_API_KEY
+    model_env: OPENAI_EVAL_MODEL
+    default_model: gpt-5-mini
+    strict_structured_output: true
+    store: false

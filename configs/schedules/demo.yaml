@@ -1,0 +1,71 @@
+schema_version: 1
+schedule_set_id: demo-observed-schedules
+version: 1.0.0
+notice: This control plane does not execute cron. The demo command, CLI/API, or named external scheduler triggers each job.
+jobs:
+  - job_id: nightly-candidate-discovery
+    name: Nightly candidate discovery
+    purpose: Turn persisted deterministic signals into inspectable candidates.
+    job_type: discovery
+    cron_expression: "15 1 * * *"
+    timezone: America/New_York
+    trigger_owner: GitHub Actions
+    trigger_mode: external_schedule
+    owner_reference: .github/workflows/discovery.yml
+    connection_state: connected
+    grace_window_minutes: 30
+  - job_id: overnight-comprehensive-evaluation
+    name: Overnight comprehensive evaluation
+    purpose: Run the complete active policy evaluation plan.
+    job_type: evaluation
+    cron_expression: "0 2 * * *"
+    timezone: America/New_York
+    trigger_owner: Paul OS scheduler
+    trigger_mode: external_schedule
+    owner_reference: agents/promotion/comprehensive
+    connection_state: disconnected
+    grace_window_minutes: 90
+  - job_id: periodic-lightweight-sweep
+    name: Periodic lightweight evaluation sweep
+    purpose: Refresh low-cost evidence for active candidates.
+    job_type: evaluation
+    cron_expression: "0 */4 * * *"
+    timezone: UTC
+    trigger_owner: Kubernetes CronJob
+    trigger_mode: external_schedule
+    owner_reference: promotion-lightweight-sweep
+    connection_state: connected
+    grace_window_minutes: 20
+  - job_id: regression-scan
+    name: Regression scan
+    purpose: Compare promoted versions with their immutable baseline snapshot.
+    job_type: regression
+    cron_expression: "30 */6 * * *"
+    timezone: UTC
+    trigger_owner: Cloud Scheduler
+    trigger_mode: external_schedule
+    owner_reference: promotion-regression-scan
+    connection_state: connected
+    grace_window_minutes: 30
+  - job_id: post-promotion-monitor
+    name: Post-promotion monitor
+    purpose: Record observations during each version's policy window.
+    job_type: monitoring
+    cron_expression: "*/30 * * * *"
+    timezone: UTC
+    trigger_owner: Temporal
+    trigger_mode: external_schedule
+    owner_reference: promotion-post-monitor
+    connection_state: disconnected
+    grace_window_minutes: 15
+  - job_id: promotion-eligibility-scan
+    name: Promotion eligibility scan
+    purpose: Recompute evidence eligibility without mutating production selection.
+    job_type: promotion_check
+    cron_expression: "10 * * * *"
+    timezone: UTC
+    trigger_owner: Paul OS Attention
+    trigger_mode: event_or_schedule
+    owner_reference: attention/promotion-eligibility
+    connection_state: connected
+    grace_window_minutes: 15

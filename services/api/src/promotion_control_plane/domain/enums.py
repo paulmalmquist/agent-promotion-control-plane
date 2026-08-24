@@ -1,0 +1,40 @@
+from enum import StrEnum
+
+
+class CandidateStage(StrEnum):
+    DISCOVERED = "DISCOVERED"
+    CANDIDATE = "CANDIDATE"
+    EVALUATING = "EVALUATING"
+    ELIGIBLE = "ELIGIBLE"
+    SHADOW = "SHADOW"
+    PROMOTED = "PROMOTED"
+    MONITORED = "MONITORED"
+
+
+class CandidateStatus(StrEnum):
+    ACTIVE = "ACTIVE"
+    BLOCKED = "BLOCKED"
+    PROMOTION_PENDING = "PROMOTION_PENDING"
+    REJECTED = "REJECTED"
+    SUSPENDED = "SUSPENDED"
+    RETIRED = "RETIRED"
+
+
+class GateVerdict(StrEnum):
+    PASSED = "PASSED"
+    FAILED = "FAILED"
+    REMAINING = "REMAINING"
+
+
+class WorkStatus(StrEnum):
+    QUEUED = "QUEUED"
+    RUNNING = "RUNNING"
+    SUCCEEDED = "SUCCEEDED"
+    FAILED = "FAILED"
+
+
+class RegistryActivationState(StrEnum):
+    NOT_REQUESTED = "NOT_REQUESTED"
+    PENDING = "PENDING"
+    SUCCEEDED = "SUCCEEDED"
+    FAILED = "FAILED"
